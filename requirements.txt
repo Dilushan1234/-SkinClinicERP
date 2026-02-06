@@ -2,3 +2,4 @@ streamlit
 firebase-admin
 streamlit-option_menu
 Pillow
+fpdf
