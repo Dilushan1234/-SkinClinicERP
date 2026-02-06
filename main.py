@@ -46,15 +46,18 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- [FIREBASE CONNECTION] ---
+# --- [FIREBASE CONNECTION - SECRETS VERSION] ---
 if not firebase_admin._apps:
-    # key.json පාවිච්චි නොකර Online Secrets පාවිච්චි කරන ක්‍රමය
     try:
-        cred = credentials.Certificate(dict(st.secrets["firebase"]))
+        # Streamlit Secrets වලින් දත්ත ටික කියවනවා
+        fb_conf = st.secrets["firebase"]
+        cred = credentials.Certificate(dict(fb_conf))
         firebase_admin.initialize_app(cred)
     except Exception as e:
-        st.error(f"Firebase Connection Error: {e}")
+        st.error(f"Firebase Configuration Error: {e}")
+
 db = firestore.client()
+
 
 
 # --- SESSION STATE ---
@@ -243,4 +246,5 @@ else:
                         if st.form_submit_button("Generate & Print Invoice"):
                             db.collection("bills").add({"name":p_name, "phone":p_phone, "total":fee-disc, "date":firestore.SERVER_TIMESTAMP})
                             st.success("Invoice Saved Successfully!"); st.balloons()
+
 
